@@ -1,8 +1,17 @@
 package flight_service
 
-import "fmt"
+import (
+	flight_model "github.com/charles-arnesus/coding-battle-go/models/flight"
+	"github.com/charles-arnesus/coding-battle-go/utils"
+)
 
-func (s *flightService) AddDestination() error {
-	fmt.Println("masuk ke service destination")
-	return nil
+func (s *flightService) AddDestination(destination flight_model.Destination) (err error) {
+
+	if destination.Name == "" {
+		return utils.ErrNameDestinationRequired
+	}
+
+	err = s.flightRepository.InsertDestination(destination)
+
+	return
 }

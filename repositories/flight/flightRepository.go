@@ -1,8 +1,13 @@
 package flight_repository
 
+import "gorm.io/gorm"
+
 type flightRepository struct {
+	db *gorm.DB
 }
 
-func NewFlightRepository() *flightRepository {
-	return &flightRepository{}
+func NewFlightRepository(db *gorm.DB) *flightRepository {
+	return &flightRepository{
+		db: db,
+	}
 }
