@@ -11,6 +11,7 @@ const NameAircraftAlreadyExistMsg = "aircraft with this name already exists"
 const NameDestinationAlreadyExistMsg = "destination with this name already exists"
 const NameDestinationRequiredMsg = "destination name is required"
 const UsernameAlreadyExistMsg = "username already exists"
+const RecordNotFound = "record not found"
 
 var ErrInputInvalid = errors.New(InputInvalidMsg)
 var ErrCommandInvalid = errors.New(CommandInvalidMsg)

@@ -49,7 +49,7 @@ func Start() {
 			fmt.Print("> ")
 			input, err := reader.ReadString('\n')
 			if err != nil {
-				fmt.Println("Error reading input:", err)
+				fmt.Println(utils.ErrInputInvalid)
 				continue
 			}
 
@@ -62,25 +62,26 @@ func Start() {
 				fmt.Print("Enter username: ")
 				usernameInput, err := reader.ReadString('\n')
 				if err != nil {
-					fmt.Println("Error reading input:", err)
+					fmt.Println(utils.ErrInputInvalid)
 					continue
 				}
 				loginDto.Username = usernameInput
 			default:
-				fmt.Println("invalid input")
+				fmt.Println(utils.ErrCommandInvalid)
 				continue
 			}
 
 			// masuk ke command login kirim parameter
 			err = authenticationService.LoginUser(loginDto)
 			if err != nil {
-				if strings.Contains(err.Error(), "record not found") {
+				fmt.Println(err.Error())
+				if strings.Contains(err.Error(), utils.RecordNotFound) {
 					fmt.Println("username not found, creating new user...")
 
 					fmt.Print("Enter name: ")
 					nameInput, err := reader.ReadString('\n')
 					if err != nil {
-						fmt.Println("Error reading input:", err)
+						fmt.Println(utils.ErrInputInvalid)
 						continue
 					}
 					registerUser := user_model.User{
