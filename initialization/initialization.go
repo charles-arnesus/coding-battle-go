@@ -17,7 +17,12 @@ import (
 )
 
 func Start() {
-	flightRepository := flight_repository.NewFlightRepository()
+	db := dbInitialization()
+	if db == nil {
+		panic("no database connection")
+	}
+
+	flightRepository := flight_repository.NewFlightRepository(db)
 	passengerRepository := passenger_repository.NewPassengerRepository()
 
 	authenticationService := authentication_service.NewAuthenticationService(passengerRepository)
@@ -41,7 +46,7 @@ func Start() {
 			fmt.Printf("2. %s\n", utils.RolePassengerLabel)
 
 			//jika tidak, masuk ke halaman login dan lakukan login
-			fmt.Print(">")
+			fmt.Print("> ")
 			input, err := reader.ReadString('\n')
 			if err != nil {
 				fmt.Println("Error reading input:", err)
@@ -77,16 +82,17 @@ func Start() {
 		}
 
 		fmt.Printf("99. %s\n", utils.ExitLabel)
-		fmt.Print(">")
+		fmt.Print("> ")
 		input, err := reader.ReadString('\n')
 		if err != nil {
-			fmt.Println("Error reading input:", err)
+			fmt.Println(utils.ErrInputInvalid)
 			continue
 		}
 		input = strings.TrimSpace(input)
 
 		if input == "99" {
-			fmt.Println("Thank you")
+			fmt.Println(utils.ExitSuccessMessage)
+			fmt.Println()
 
 			//redirect ke logout
 			loggedUser = user_model.User{}
@@ -95,8 +101,11 @@ func Start() {
 
 		err = handler.ExecuteCommand(input, loggedUser.Role)
 		if err != nil {
-			fmt.Printf("Error: %v \n", err)
+			fmt.Printf("Error: %v", err)
 		}
+
+		fmt.Println()
+		fmt.Println()
 	}
 }
 
