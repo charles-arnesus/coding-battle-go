@@ -6,6 +6,6 @@ import (
 
 var loggedUser = user_model.User{}
 
-func (r *authenticationService) GetLoggedUser() (user_model.User, error) {
-	return loggedUser, nil
+func (r *authenticationService) GetLoggedUser() user_model.User {
+	return loggedUser
 }

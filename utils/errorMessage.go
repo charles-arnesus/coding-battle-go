@@ -10,6 +10,7 @@ const NameAircraftRequiredMsg = "aircraft name is required"
 const NameAircraftAlreadyExistMsg = "aircraft with this name already exists"
 const NameDestinationAlreadyExistMsg = "destination with this name already exists"
 const NameDestinationRequiredMsg = "destination name is required"
+const UsernameAlreadyExistMsg = "username already exists"
 
 var ErrInputInvalid = errors.New(InputInvalidMsg)
 var ErrCommandInvalid = errors.New(CommandInvalidMsg)
@@ -19,5 +20,6 @@ var ErrNameAircraftRequired = errors.New(NameAircraftRequiredMsg)
 var ErrNameAircraftAlreadyExist = errors.New(NameAircraftAlreadyExistMsg)
 var ErrNameDestinationAlreadyExist = errors.New(NameDestinationAlreadyExistMsg)
 var ErrNameDestinationRequired = errors.New(NameDestinationRequiredMsg)
+var ErrUsernameAlreadyExistMsg = errors.New(UsernameAlreadyExistMsg)
 
 const UniqueViolationCodePostgres = "23505"

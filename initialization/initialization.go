@@ -23,7 +23,7 @@ func Start() {
 	}
 
 	flightRepository := flight_repository.NewFlightRepository(db)
-	passengerRepository := passenger_repository.NewPassengerRepository()
+	passengerRepository := passenger_repository.NewPassengerRepository(db)
 
 	authenticationService := authentication_service.NewAuthenticationService(passengerRepository)
 	flightService := flight_service.NewFlightService(flightRepository)
@@ -55,9 +55,10 @@ func Start() {
 
 			input = strings.TrimSpace(input)
 			loginDto := &user_model.LoginDto{}
-			if input == "1" {
+			switch input {
+			case "1":
 				loginDto.Role = utils.RoleAdmin
-			} else {
+			case "2":
 				fmt.Print("Enter username: ")
 				usernameInput, err := reader.ReadString('\n')
 				if err != nil {
@@ -65,14 +66,40 @@ func Start() {
 					continue
 				}
 				loginDto.Username = usernameInput
+			default:
+				fmt.Println("invalid input")
+				continue
 			}
 
 			// masuk ke command login kirim parameter
-			authenticationService.LoginUser(loginDto)
-			// hasil dari login di tampung ke loggedUser
-			loggedUser = user_model.User{
-				Role: utils.RoleAdmin,
+			err = authenticationService.LoginUser(loginDto)
+			if err != nil {
+				if strings.Contains(err.Error(), "record not found") {
+					fmt.Println("username not found, creating new user...")
+
+					fmt.Print("Enter name: ")
+					nameInput, err := reader.ReadString('\n')
+					if err != nil {
+						fmt.Println("Error reading input:", err)
+						continue
+					}
+					registerUser := user_model.User{
+						Username: loginDto.Username,
+						Name:     nameInput,
+						Role:     utils.RolePassenger,
+					}
+					err = authenticationService.RegisterUser(registerUser)
+					if err != nil {
+						fmt.Println("Error creating new user:", err)
+						continue
+					}
+				} else {
+					fmt.Println("Error when trying to login:", err)
+					continue
+				}
 			}
+			// hasil dari login di tampung ke loggedUser
+			loggedUser = authenticationService.GetLoggedUser()
 		}
 
 		if loggedUser.Role == utils.RoleAdmin {

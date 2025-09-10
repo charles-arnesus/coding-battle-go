@@ -1,9 +1,12 @@
 package user_model
 
+import "gorm.io/gorm"
+
 type User struct {
-	Username string
-	Name     string
-	Role     string
+	gorm.Model
+	Username string `gorm:"uniqueIndex;not null"`
+	Name     string `gorm:"not null"`
+	Role     string `gorm:"not null"`
 }
 
 type LoginDto struct {
