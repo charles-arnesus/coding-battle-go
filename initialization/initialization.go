@@ -10,6 +10,8 @@ import (
 	handler "github.com/charles-arnesus/coding-battle-go/handlers"
 	user_model "github.com/charles-arnesus/coding-battle-go/models/user"
 	flight_repository "github.com/charles-arnesus/coding-battle-go/repositories/flight"
+	passenger_repository "github.com/charles-arnesus/coding-battle-go/repositories/passenger"
+	authentication_service "github.com/charles-arnesus/coding-battle-go/services/authentication"
 	flight_service "github.com/charles-arnesus/coding-battle-go/services/flight"
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
@@ -21,8 +23,9 @@ func Start() {
 	}
 
 	flightRepository := flight_repository.NewFlightRepository(db)
+	passengerRepository := passenger_repository.NewPassengerRepository(db)
 
-	//authenticationService := authentication_service.NewAuthenticationService()
+	authenticationService := authentication_service.NewAuthenticationService(passengerRepository)
 	flightService := flight_service.NewFlightService(flightRepository)
 
 	handler := handler.NewHandler()
@@ -36,7 +39,7 @@ func Start() {
 		reader := bufio.NewReaderSize(os.Stdin, 1)
 
 		// cek apakah ada user yang login
-		if loggedUser.Name == "" {
+		if loggedUser.Username == "" {
 
 			fmt.Println("Login as:")
 			fmt.Printf("1. %s\n", utils.RoleAdminLabel)
@@ -46,23 +49,58 @@ func Start() {
 			fmt.Print("> ")
 			input, err := reader.ReadString('\n')
 			if err != nil {
-				fmt.Println("Error reading input:", err)
+				fmt.Println(utils.ErrInputInvalid)
 				continue
 			}
 
 			input = strings.TrimSpace(input)
-			if input == "1" {
-				// param -> role = admin
-			} else {
-				// param -> username
-				fmt.Println("Enter username: ")
+			loginDto := &user_model.LoginDto{}
+			switch input {
+			case "1":
+				loginDto.Role = utils.RoleAdmin
+			case "2":
+				fmt.Print("Enter username: ")
+				usernameInput, err := reader.ReadString('\n')
+				if err != nil {
+					fmt.Println(utils.ErrInputInvalid)
+					continue
+				}
+				loginDto.Username = usernameInput
+			default:
+				fmt.Println(utils.ErrCommandInvalid)
+				continue
 			}
 
 			// masuk ke command login kirim parameter
-			// hasil dari login di tampung ke loggedUser
-			loggedUser = user_model.User{
-				Role: utils.RoleAdmin,
+			err = authenticationService.LoginUser(loginDto)
+			if err != nil {
+				fmt.Println(err.Error())
+				if strings.Contains(err.Error(), utils.RecordNotFound) {
+					fmt.Println("username not found, creating new user...")
+
+					fmt.Print("Enter name: ")
+					nameInput, err := reader.ReadString('\n')
+					if err != nil {
+						fmt.Println(utils.ErrInputInvalid)
+						continue
+					}
+					registerUser := user_model.User{
+						Username: loginDto.Username,
+						Name:     nameInput,
+						Role:     utils.RolePassenger,
+					}
+					err = authenticationService.RegisterUser(registerUser)
+					if err != nil {
+						fmt.Println("Error creating new user:", err)
+						continue
+					}
+				} else {
+					fmt.Println("Error when trying to login:", err)
+					continue
+				}
 			}
+			// hasil dari login di tampung ke loggedUser
+			loggedUser = authenticationService.GetLoggedUser()
 		}
 
 		if loggedUser.Role == utils.RoleAdmin {
