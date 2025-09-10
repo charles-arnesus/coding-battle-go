@@ -10,14 +10,17 @@ import (
 	handler "github.com/charles-arnesus/coding-battle-go/handlers"
 	user_model "github.com/charles-arnesus/coding-battle-go/models/user"
 	flight_repository "github.com/charles-arnesus/coding-battle-go/repositories/flight"
+	passenger_repository "github.com/charles-arnesus/coding-battle-go/repositories/passenger"
+	authentication_service "github.com/charles-arnesus/coding-battle-go/services/authentication"
 	flight_service "github.com/charles-arnesus/coding-battle-go/services/flight"
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
 
 func Start() {
 	flightRepository := flight_repository.NewFlightRepository()
+	passengerRepository := passenger_repository.NewPassengerRepository()
 
-	//authenticationService := authentication_service.NewAuthenticationService()
+	authenticationService := authentication_service.NewAuthenticationService(passengerRepository)
 	flightService := flight_service.NewFlightService(flightRepository)
 
 	handler := handler.NewHandler()
@@ -31,7 +34,7 @@ func Start() {
 		reader := bufio.NewReaderSize(os.Stdin, 1)
 
 		// cek apakah ada user yang login
-		if loggedUser.Name == "" {
+		if loggedUser.Username == "" {
 
 			fmt.Println("Login as:")
 			fmt.Printf("1. %s\n", utils.RoleAdminLabel)
@@ -46,14 +49,21 @@ func Start() {
 			}
 
 			input = strings.TrimSpace(input)
+			loginDto := &user_model.LoginDto{}
 			if input == "1" {
-				// param -> role = admin
+				loginDto.Role = utils.RoleAdmin
 			} else {
-				// param -> username
-				fmt.Println("Enter username: ")
+				fmt.Print("Enter username: ")
+				usernameInput, err := reader.ReadString('\n')
+				if err != nil {
+					fmt.Println("Error reading input:", err)
+					continue
+				}
+				loginDto.Username = usernameInput
 			}
 
 			// masuk ke command login kirim parameter
+			authenticationService.LoginUser(loginDto)
 			// hasil dari login di tampung ke loggedUser
 			loggedUser = user_model.User{
 				Role: utils.RoleAdmin,
