@@ -7,11 +7,11 @@ import (
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
 
-func (r *flightRepository) InsertAircraft(aircraft flight_model.Aircraft) (err error) {
-	err = r.db.Create(&aircraft).Error
+func (r *flightRepository) InsertDestination(destination flight_model.Destination) (err error) {
+	err = r.db.Create(&destination).Error
 
 	if err != nil && strings.Contains(err.Error(), utils.UniqueViolationCodePostgres) {
-		err = utils.ErrNameAircraftAlreadyExist
+		err = utils.ErrNameDestinationAlreadyExist
 	}
 
 	return
