@@ -11,5 +11,5 @@ type FlightRepository interface {
 	GetAllDestinations() (destinations []flight_model.Destination, err error)
 	FindAircraftByName(name string) (aircraft flight_model.Aircraft, err error)
 	FindDestinationByName(name string) (destination flight_model.Destination, err error)
-	FindFlightRoutesByDay(day int) (flightRoutes []flight_model.FlightRoute, err error)
+	FindFlightRoutesByDay(minDay, maxDay int) (flightRoutes []flight_model.FlightRoute, err error)
 }

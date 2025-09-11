@@ -9,5 +9,5 @@ type FlightService interface {
 
 	GetAircrafts(name string) (aircrafts []flight_model.Aircraft, err error)
 	GetDestinations(name string) (destinations []flight_model.Destination, err error)
-	GetFlightRoutes(day int) (flightRoutes []flight_model.FlightRoute, err error)
+	GetFlightRoutes(minDay, maxDay int) (flightRoutes []flight_model.FlightRoute, err error)
 }

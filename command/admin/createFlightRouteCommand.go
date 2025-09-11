@@ -61,8 +61,8 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 	}
 
 	fmt.Println("=== CREATE FLIGHT ROUTE ===")
-	fmt.Printf("Available city: %s\n", strings.Join(destinationsStrings, ","))
-	fmt.Printf("Available aircraft: %s\n", strings.Join(aircraftsStrings, ","))
+	fmt.Printf("Available city: %s\n", strings.Join(destinationsStrings, ", "))
+	fmt.Printf("Available aircraft: %s\n", strings.Join(aircraftsStrings, ", "))
 
 	fmt.Println()
 	fmt.Print("Enter departure city: ")

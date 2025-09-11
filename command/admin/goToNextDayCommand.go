@@ -28,18 +28,34 @@ func (h *GoToNextDayCommand) Execute() (err error) {
 	currentDay := h.systemOperation.SetNextDay()
 	fmt.Printf("Current day is now: %d\n", currentDay)
 
-	flightRoutes, err := h.flightService.GetFlightRoutes(currentDay + 1)
+	flightRoutes, err := h.flightService.GetFlightRoutes(currentDay, currentDay+1)
 	if err != nil {
 		err = utils.ErrSomethingWentWrongGet
 		return
 	}
 
+	strDay := ""
 	for _, flightRoute := range flightRoutes {
-		fmt.Printf("Flight %s -> %s is scheduled for tomorrow.\n", flightRoute.DepartureCity.Name, flightRoute.DestinationCity.Name)
+		switch flightRoute.ScheduledDay {
+		case currentDay:
+			strDay = "today"
+		case currentDay + 1:
+			strDay = "tomorrow"
+		default:
+			strDay = fmt.Sprintf("Day %d", flightRoute.ScheduledDay)
+		}
+
+		fmt.Printf("Flight %s -> %s is scheduled for %s.\n", flightRoute.DepartureCity.Name, flightRoute.DestinationCity.Name, strDay)
 	}
 
 	if len(flightRoutes) == 0 {
-		fmt.Println("There is no flight schedule for tomorrow")
+		if strDay == "today" {
+			strDay = ""
+		} else if strDay != "" {
+			strDay = "until " + strDay
+		}
+
+		fmt.Printf("There is no flight schedule for today %s", strDay)
 	}
 
 	return
