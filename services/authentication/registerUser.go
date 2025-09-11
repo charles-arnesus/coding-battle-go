@@ -6,10 +6,10 @@ import (
 
 func (r *authenticationService) RegisterUser(user user_model.User) (err error) {
 
-	err = r.passengerRepository.RegisterUser(user)
+	err = r.userRepository.RegisterUser(user)
 
 	if err == nil {
-		loggedUser = user
+		r.userRepository.SetLoggedUser(user)
 	}
 
 	return

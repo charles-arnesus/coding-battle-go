@@ -10,7 +10,7 @@ import (
 	handler "github.com/charles-arnesus/coding-battle-go/handlers"
 	user_model "github.com/charles-arnesus/coding-battle-go/models/user"
 	flight_repository "github.com/charles-arnesus/coding-battle-go/repositories/flight"
-	passenger_repository "github.com/charles-arnesus/coding-battle-go/repositories/passenger"
+	user_repository "github.com/charles-arnesus/coding-battle-go/repositories/user"
 	authentication_service "github.com/charles-arnesus/coding-battle-go/services/authentication"
 	flight_service "github.com/charles-arnesus/coding-battle-go/services/flight"
 	"github.com/charles-arnesus/coding-battle-go/utils"
@@ -23,9 +23,9 @@ func Start() {
 	}
 
 	flightRepository := flight_repository.NewFlightRepository(db)
-	passengerRepository := passenger_repository.NewPassengerRepository(db)
+	userRepository := user_repository.NewUserRepository(db)
 
-	authenticationService := authentication_service.NewAuthenticationService(passengerRepository)
+	authenticationService := authentication_service.NewAuthenticationService(userRepository)
 	flightService := flight_service.NewFlightService(flightRepository)
 
 	handler := handler.NewHandler()

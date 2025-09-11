@@ -14,22 +14,23 @@ func (r *authenticationService) LoginUser(in *user_model.LoginDto) error {
 		findByRoleDto := &user_model.FindByRoleDto{
 			Role: in.Role,
 		}
-		user, err := r.passengerRepository.FindByRole(findByRoleDto)
+		user, err := r.userRepository.FindByRole(findByRoleDto)
 		if err != nil {
 			return err
 		}
 		// save user into loggedUser variable
-		loggedUser = user
+		r.userRepository.SetLoggedUser(user)
+
 		// If logged in as passenger
 	} else {
 		findByUsernameDto := &user_model.FindByUsernameDto{
 			Username: in.Username,
 		}
-		user, err := r.passengerRepository.FindByUsername(findByUsernameDto)
+		user, err := r.userRepository.FindByUsername(findByUsernameDto)
 		if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 			return err
 		}
-		loggedUser = user
+		r.userRepository.SetLoggedUser(user)
 	}
 
 	return nil

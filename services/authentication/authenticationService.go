@@ -1,15 +1,13 @@
 package authentication_service
 
-import (
-	passenger_repository "github.com/charles-arnesus/coding-battle-go/repositories/passenger"
-)
+import user_repository "github.com/charles-arnesus/coding-battle-go/repositories/user"
 
 type authenticationService struct {
-	passengerRepository passenger_repository.PassengerRepository
+	userRepository user_repository.UserRepository
 }
 
-func NewAuthenticationService(passengerRepository passenger_repository.PassengerRepository) *authenticationService {
+func NewAuthenticationService(userRepository user_repository.UserRepository) *authenticationService {
 	return &authenticationService{
-		passengerRepository: passengerRepository,
+		userRepository: userRepository,
 	}
 }
