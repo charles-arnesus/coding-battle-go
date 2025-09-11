@@ -5,7 +5,7 @@ import (
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
 
-func (s *flightService) RegisterAircraft(aircraft flight_model.Aircraft) (err error) {
+func (s *flightService) AddAircraft(aircraft flight_model.Aircraft) (err error) {
 	if aircraft.Seats < 1 {
 		return utils.ErrSeatsAircraftCapacity
 	}

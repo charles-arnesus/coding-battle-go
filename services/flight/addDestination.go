@@ -8,7 +8,8 @@ import (
 func (s *flightService) AddDestination(destination flight_model.Destination) (err error) {
 
 	if destination.Name == "" {
-		return utils.ErrNameDestinationRequired
+		err = utils.ErrNameDestinationRequired
+		return
 	}
 
 	err = s.flightRepository.InsertDestination(destination)

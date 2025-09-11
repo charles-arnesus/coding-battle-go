@@ -31,6 +31,7 @@ func Start() {
 	handler := handler.NewHandler()
 	handler.RegisterCommand(command.NewRegisterAircraftCommand(flightService))
 	handler.RegisterCommand(command.NewAddDestinationCommand(flightService))
+	handler.RegisterCommand(command.NewCreateFlightRouteCommand(flightService))
 
 	// ini nanti panggil function logged user yang di auth service
 	loggedUser := user_model.User{}
@@ -75,7 +76,7 @@ func Start() {
 			err = authenticationService.LoginUser(loginDto)
 			if err != nil {
 				fmt.Println(err.Error())
-				if strings.Contains(err.Error(), utils.RecordNotFound) {
+				if strings.Contains(err.Error(), utils.RecordNotFoundMessage) {
 					fmt.Println("username not found, creating new user...")
 
 					fmt.Print("Enter name: ")

@@ -2,6 +2,9 @@ package utils
 
 import "fmt"
 
+// max days
+const MaxDaysInYear = 365
+
 const RoleAdmin = "admin"
 const RoleAdminLabel = "Admin"
 const RolePassenger = "passenger"
@@ -10,6 +13,7 @@ const RolePassengerLabel = "Passenger"
 // ID service
 var AdminRegisterAircraftID = fmt.Sprintf("%s_1", RoleAdmin)
 var AdminAddDestinationID = fmt.Sprintf("%s_2", RoleAdmin)
+var AdminCreateFligthRouteID = fmt.Sprintf("%s_3", RoleAdmin)
 
 // menu
 const RegisterAircraftLabel = "Register Aircraft"
