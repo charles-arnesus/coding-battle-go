@@ -12,6 +12,7 @@ const NameDestinationAlreadyExistMsg = "destination with this name already exist
 const NameDestinationRequiredMsg = "destination name is required"
 const UsernameAlreadyExistMsg = "username already exists"
 const RecordNotFound = "record not found"
+const BookingServiceDisabledMsg = "booking service is disabled. contact admin to enable booking service"
 
 var ErrInputInvalid = errors.New(InputInvalidMsg)
 var ErrCommandInvalid = errors.New(CommandInvalidMsg)
@@ -22,5 +23,6 @@ var ErrNameAircraftAlreadyExist = errors.New(NameAircraftAlreadyExistMsg)
 var ErrNameDestinationAlreadyExist = errors.New(NameDestinationAlreadyExistMsg)
 var ErrNameDestinationRequired = errors.New(NameDestinationRequiredMsg)
 var ErrUsernameAlreadyExistMsg = errors.New(UsernameAlreadyExistMsg)
+var ErrBookingServiceDisabledMsg = errors.New(BookingServiceDisabledMsg)
 
 const UniqueViolationCodePostgres = "23505"

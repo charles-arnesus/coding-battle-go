@@ -8,9 +8,14 @@ const RolePassenger = "passenger"
 const RolePassengerLabel = "Passenger"
 
 // ID service
+// admin
 var AdminRegisterAircraftID = fmt.Sprintf("%s_1", RoleAdmin)
 var AdminAddDestinationID = fmt.Sprintf("%s_2", RoleAdmin)
 var AdminSetBookingSystemID = fmt.Sprintf("%s_4", RoleAdmin)
+
+// passenger
+var PassengerBookFlightID = fmt.Sprintf("%s_1", RolePassenger)
+var PassengerCancelFlightID = fmt.Sprintf("%s_2", RolePassenger)
 
 // menu
 const RegisterAircraftLabel = "Register Aircraft"

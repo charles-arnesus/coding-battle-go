@@ -20,13 +20,11 @@ func NewSetBookingSystemCommand(bookingService booking_service.BookingService) *
 func (h *SetBookingSystemCommand) Execute() (err error) {
 	bookingSystem, err := h.bookingService.GetBookingSystem()
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	err = h.bookingService.SetBookingSystem(bookingSystem)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
