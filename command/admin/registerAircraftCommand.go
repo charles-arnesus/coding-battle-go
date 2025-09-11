@@ -25,7 +25,7 @@ func NewRegisterAircraftCommand(flightService flight_service.FlightService) *Reg
 func (h *RegisterAircraftCommand) Execute() (err error) {
 	reader := bufio.NewReaderSize(os.Stdin, 1)
 
-	fmt.Print("Enter aircraft name:")
+	fmt.Print("Enter aircraft name: ")
 
 	name, err := reader.ReadString('\n')
 	if err != nil {

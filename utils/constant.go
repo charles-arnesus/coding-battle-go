@@ -16,6 +16,7 @@ var AdminRegisterAircraftID = fmt.Sprintf("%s_1", RoleAdmin)
 var AdminAddDestinationID = fmt.Sprintf("%s_2", RoleAdmin)
 var AdminCreateFligthRouteID = fmt.Sprintf("%s_3", RoleAdmin)
 var AdminSetBookingSystemID = fmt.Sprintf("%s_4", RoleAdmin)
+var AdminGoToNextDaySystemID = fmt.Sprintf("%s_5", RoleAdmin)
 
 // passenger
 var PassengerBookFlightID = fmt.Sprintf("%s_1", RolePassenger)
