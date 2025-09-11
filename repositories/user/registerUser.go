@@ -1,4 +1,4 @@
-package passenger_repository
+package user_repository
 
 import (
 	"strings"
@@ -7,7 +7,7 @@ import (
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
 
-func (r *passengerRepository) RegisterUser(user user_model.User) (err error) {
+func (r *userRepository) RegisterUser(user user_model.User) (err error) {
 	err = r.db.Create(&user).Error
 
 	if err != nil && strings.Contains(err.Error(), utils.UniqueViolationCodePostgres) {
