@@ -37,6 +37,7 @@ func Start() {
 	// Register admin command
 	handler.RegisterCommand(admin_command.NewRegisterAircraftCommand(flightService))
 	handler.RegisterCommand(admin_command.NewAddDestinationCommand(flightService))
+	handler.RegisterCommand(admin_command.NewCreateFlightRouteCommand(flightService))
 	handler.RegisterCommand(admin_command.NewSetBookingSystemCommand(bookingService))
 	// Register passenger command
 	handler.RegisterCommand(passenger_command.NewBookFlightCommand(bookingService))
@@ -85,7 +86,7 @@ func Start() {
 			err = authenticationService.LoginUser(loginDto)
 			if err != nil {
 				fmt.Println(err.Error())
-				if strings.Contains(err.Error(), utils.RecordNotFound) {
+				if strings.Contains(err.Error(), utils.RecordNotFoundMessage) {
 					fmt.Println("username not found, creating new user...")
 
 					fmt.Print("Enter name: ")

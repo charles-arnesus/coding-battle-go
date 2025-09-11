@@ -1,28 +1,43 @@
 package utils
 
-import "errors"
+import (
+	"errors"
+)
 
-const InputInvalidMsg = "cannot read the input"
-const CommandInvalidMsg = "command is invalid"
-const RolePermissionMsg = "this role don't have a permission to go to this page"
-const SeatsAircraftCapacityMsg = "the seat capacity should be number and greater than 0"
-const NameAircraftRequiredMsg = "aircraft name is required"
-const NameAircraftAlreadyExistMsg = "aircraft with this name already exists"
-const NameDestinationAlreadyExistMsg = "destination with this name already exists"
+// error message
+const InputInvalidMessage = "cannot read the input"
+const CommandInvalidMessage = "command is invalid"
+const RolePermissionMessage = "this role don't have a permission to go to this page"
+const SeatsAircraftCapacityMessage = "the seat capacity should be number and greater than 0"
+const NameAircraftRequiredMessage = "aircraft name is required"
+const NameAircraftAlreadyExistMessage = "aircraft with this name already exists"
+const NameDestinationAlreadyExistMessage = "destination with this name already exists"
 const NameDestinationRequiredMsg = "destination name is required"
-const UsernameAlreadyExistMsg = "username already exists"
-const RecordNotFound = "record not found"
+const UsernameAlreadyExistMessage = "username already exists"
+const RecordNotFoundMessage = "record not found"
+const SomethingWentWrongGetMessage = "something went wrong when getting the data"
+const DestinationsDataEmptyMessage = "the data destination is still empty"
+const AircraftDataEmptyMessage = "the data aircraft is still empty"
+const ScheduledDayInvalidMessage = "the scheduled day should be between current day (%d) - (%d)"
+const DepartureDestinationSameMessage = "the departure and destination city should be different"
 const BookingServiceDisabledMsg = "booking service is disabled. contact admin to enable booking service"
 
-var ErrInputInvalid = errors.New(InputInvalidMsg)
-var ErrCommandInvalid = errors.New(CommandInvalidMsg)
-var ErrRolePermission = errors.New(RolePermissionMsg)
-var ErrSeatsAircraftCapacity = errors.New(SeatsAircraftCapacityMsg)
-var ErrNameAircraftRequired = errors.New(NameAircraftRequiredMsg)
-var ErrNameAircraftAlreadyExist = errors.New(NameAircraftAlreadyExistMsg)
-var ErrNameDestinationAlreadyExist = errors.New(NameDestinationAlreadyExistMsg)
+// error object
+var ErrInputInvalid = errors.New(InputInvalidMessage)
+var ErrCommandInvalid = errors.New(CommandInvalidMessage)
+var ErrRolePermission = errors.New(RolePermissionMessage)
+var ErrSeatsAircraftCapacity = errors.New(SeatsAircraftCapacityMessage)
+var ErrNameAircraftRequired = errors.New(NameAircraftRequiredMessage)
+var ErrNameAircraftAlreadyExist = errors.New(NameAircraftAlreadyExistMessage)
+var ErrNameDestinationAlreadyExist = errors.New(NameDestinationAlreadyExistMessage)
 var ErrNameDestinationRequired = errors.New(NameDestinationRequiredMsg)
-var ErrUsernameAlreadyExistMsg = errors.New(UsernameAlreadyExistMsg)
+var ErrUsernameAlreadyExistMsg = errors.New(UsernameAlreadyExistMessage)
+var ErrSomethingWentWrongGet = errors.New(SomethingWentWrongGetMessage)
+var ErrDestinationsDataEmpty = errors.New(DestinationsDataEmptyMessage)
+var ErrAircraftDataEmpty = errors.New(AircraftDataEmptyMessage)
+var ErrRecordNotFound = errors.New(RecordNotFoundMessage)
+var ErrDepartureDestinationSame = errors.New(DepartureDestinationSameMessage)
 var ErrBookingServiceDisabledMsg = errors.New(BookingServiceDisabledMsg)
 
+// error code message
 const UniqueViolationCodePostgres = "23505"
