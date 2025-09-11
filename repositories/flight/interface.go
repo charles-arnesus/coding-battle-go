@@ -5,4 +5,10 @@ import flight_model "github.com/charles-arnesus/coding-battle-go/models/flight"
 type FlightRepository interface {
 	InsertAircraft(aircraft flight_model.Aircraft) error
 	InsertDestination(destination flight_model.Destination) error
+	InsertFlightRoute(flightRoute flight_model.FlightRoute) (err error)
+
+	GetAllAircraft() (aircrafts []flight_model.Aircraft, err error)
+	GetAllDestinations() (destinations []flight_model.Destination, err error)
+	FindAircraftByName(name string) (aircraft flight_model.Aircraft, err error)
+	FindDestinationByName(name string) (destination flight_model.Destination, err error)
 }

@@ -48,7 +48,7 @@ func (h *RegisterAircraftCommand) Execute() (err error) {
 		Seats: int64(seat),
 	}
 
-	err = h.flightService.RegisterAircraft(aircraft)
+	err = h.flightService.AddAircraft(aircraft)
 	if err == nil {
 		fmt.Printf(utils.RegisterAircraftSuccessMessage, name, seat)
 	}
