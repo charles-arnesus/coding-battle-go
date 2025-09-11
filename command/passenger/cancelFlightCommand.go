@@ -20,6 +20,7 @@ func NewCancelFlightCommand(bookingService booking_service.BookingService) *Canc
 func (h *CancelFlightCommand) Execute() (err error) {
 	bookingSystem, err := h.bookingService.GetBookingSystem()
 	if err != nil {
+		err = utils.ErrSomethingWentWrongGet
 		return
 	}
 

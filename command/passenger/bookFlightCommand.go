@@ -20,6 +20,7 @@ func NewBookFlightCommand(bookingService booking_service.BookingService) *BookFl
 func (h *BookFlightCommand) Execute() (err error) {
 	bookingSystem, err := h.bookingService.GetBookingSystem()
 	if err != nil {
+		err = utils.ErrSomethingWentWrongGet
 		return
 	}
 
