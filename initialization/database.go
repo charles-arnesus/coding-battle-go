@@ -50,6 +50,7 @@ func migrateDB(db *gorm.DB) (err error) {
 	db.Migrator().DropTable(&flight_model.Aircraft{})
 	db.Migrator().DropTable(&flight_model.Destination{})
 	db.Migrator().DropTable(&flight_model.FlightRoute{})
+	db.Migrator().DropTable(&flight_model.FlightRouteSeat{})
 	db.Migrator().DropTable(&user_model.User{})
 	db.Migrator().DropTable(&booking_model.BookingSystem{})
 
@@ -57,6 +58,7 @@ func migrateDB(db *gorm.DB) (err error) {
 		&flight_model.Aircraft{},
 		&flight_model.Destination{},
 		&flight_model.FlightRoute{},
+		&flight_model.FlightRouteSeat{},
 		&user_model.User{},
 		&booking_model.BookingSystem{},
 	)

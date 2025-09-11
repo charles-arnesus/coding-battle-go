@@ -138,6 +138,7 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 		DepartureCity:   departureCityObj[0],
 		DestinationCity: destinationCityObj[0],
 		ScheduledDay:    scheduledDay,
+		Status:          utils.SCHEDULED,
 	}
 
 	err = h.flightService.AddFlightRoute(flight_model.AddFlightRouteDTO{

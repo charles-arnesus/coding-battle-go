@@ -46,7 +46,7 @@ func Start() {
 	handler.RegisterCommand(admin_command.NewGoToNextDayCommand(systemOperationService, flightService))
 
 	// Register passenger command
-	handler.RegisterCommand(passenger_command.NewBookFlightCommand(bookingService))
+	handler.RegisterCommand(passenger_command.NewBookFlightCommand(bookingService, flightService, systemOperationService))
 	handler.RegisterCommand(passenger_command.NewCancelFlightCommand(bookingService))
 
 	// ini nanti panggil function logged user yang di auth service

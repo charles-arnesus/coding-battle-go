@@ -17,7 +17,7 @@ type FlightRoute struct {
 	Status            string      `gorm:"not null"`
 }
 
-type FlightRouteSeats struct {
+type FlightRouteSeat struct {
 	gorm.Model
 	FlightRouteID uint
 	UserID        uint
@@ -29,4 +29,10 @@ type FlightRouteSeats struct {
 type AddFlightRouteDTO struct {
 	FlightRoute FlightRoute
 	CurrentDay  int
+}
+
+type GetAvailableFlightRouteDto struct {
+	DepartureCityID   uint
+	DestinationCityID uint
+	CurrentDay        int
 }
