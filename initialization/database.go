@@ -49,12 +49,14 @@ func migrateDB(db *gorm.DB) (err error) {
 	// untuk testing
 	db.Migrator().DropTable(&flight_model.Aircraft{})
 	db.Migrator().DropTable(&flight_model.Destination{})
+	db.Migrator().DropTable(&flight_model.FlightRoute{})
 	db.Migrator().DropTable(&user_model.User{})
 	db.Migrator().DropTable(&booking_model.BookingSystem{})
 
 	err = db.AutoMigrate(
 		&flight_model.Aircraft{},
 		&flight_model.Destination{},
+		&flight_model.FlightRoute{},
 		&user_model.User{},
 		&booking_model.BookingSystem{},
 	)

@@ -25,3 +25,8 @@ type FlightRouteSeats struct {
 	FlightRoute   FlightRoute     `gorm:"foreignKey:FlightRouteID;"`
 	User          user_model.User `gorm:"foreignKey:UserID;"`
 }
+
+type AddFlightRouteDTO struct {
+	FlightRoute FlightRoute
+	CurrentDay  int
+}
