@@ -9,9 +9,11 @@ import (
 	command "github.com/charles-arnesus/coding-battle-go/command/admin"
 	handler "github.com/charles-arnesus/coding-battle-go/handlers"
 	user_model "github.com/charles-arnesus/coding-battle-go/models/user"
+	booking_repository "github.com/charles-arnesus/coding-battle-go/repositories/booking"
 	flight_repository "github.com/charles-arnesus/coding-battle-go/repositories/flight"
 	user_repository "github.com/charles-arnesus/coding-battle-go/repositories/user"
 	authentication_service "github.com/charles-arnesus/coding-battle-go/services/authentication"
+	booking_service "github.com/charles-arnesus/coding-battle-go/services/booking"
 	flight_service "github.com/charles-arnesus/coding-battle-go/services/flight"
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
@@ -24,13 +26,16 @@ func Start() {
 
 	flightRepository := flight_repository.NewFlightRepository(db)
 	userRepository := user_repository.NewUserRepository(db)
+	bookingRepository := booking_repository.NewBookingRepository(db)
 
 	authenticationService := authentication_service.NewAuthenticationService(userRepository)
 	flightService := flight_service.NewFlightService(flightRepository)
+	bookingService := booking_service.NewBookingRepository(bookingRepository)
 
 	handler := handler.NewHandler()
 	handler.RegisterCommand(command.NewRegisterAircraftCommand(flightService))
 	handler.RegisterCommand(command.NewAddDestinationCommand(flightService))
+	handler.RegisterCommand(command.NewSetBookingSystemCommand(bookingService))
 
 	// ini nanti panggil function logged user yang di auth service
 	loggedUser := user_model.User{}

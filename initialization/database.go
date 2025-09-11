@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	booking_model "github.com/charles-arnesus/coding-battle-go/models/booking"
 	flight_model "github.com/charles-arnesus/coding-battle-go/models/flight"
 	user_model "github.com/charles-arnesus/coding-battle-go/models/user"
 	"gorm.io/driver/postgres"
@@ -49,14 +50,17 @@ func migrateDB(db *gorm.DB) (err error) {
 	db.Migrator().DropTable(&flight_model.Aircraft{})
 	db.Migrator().DropTable(&flight_model.Destination{})
 	db.Migrator().DropTable(&user_model.User{})
+	db.Migrator().DropTable(&booking_model.BookingSystem{})
 
 	err = db.AutoMigrate(
 		&flight_model.Aircraft{},
 		&flight_model.Destination{},
 		&user_model.User{},
+		&booking_model.BookingSystem{},
 	)
 
 	db.Create(&user_model.User{Username: "admin", Name: "admin", Role: "admin"})
+	db.Create(&booking_model.BookingSystem{IsActive: false})
 
 	return
 }

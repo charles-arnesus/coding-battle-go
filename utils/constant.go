@@ -10,12 +10,13 @@ const RolePassengerLabel = "Passenger"
 // ID service
 var AdminRegisterAircraftID = fmt.Sprintf("%s_1", RoleAdmin)
 var AdminAddDestinationID = fmt.Sprintf("%s_2", RoleAdmin)
+var AdminSetBookingSystemID = fmt.Sprintf("%s_4", RoleAdmin)
 
 // menu
 const RegisterAircraftLabel = "Register Aircraft"
 const AddDestinationLabel = "Add Destination"
 const CreateFlightRouteLabel = "Create Flight Route"
-const RunBookingServiceLabel = "Run Booking Service"
+const RunBookingServiceLabel = "Enable/Disable Booking Service"
 const GoToNextDayLabel = "Go to Next Day"
 const RunFlightLabel = "Run Flight"
 const ExitLabel = "Exit"
