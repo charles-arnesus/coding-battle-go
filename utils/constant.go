@@ -39,6 +39,10 @@ const SCHEDULED = "SCHEDULED"
 const DEPARTED = "DEPARTED"
 const ARRIVED = "ARRIVED"
 
+// yes no
+const Yes = "y"
+const No = "n"
+
 var MenuAdmin = []string{
 	RegisterAircraftLabel, AddDestinationLabel, CreateFlightRouteLabel, RunBookingServiceLabel, GoToNextDayLabel, RunFlightLabel,
 }

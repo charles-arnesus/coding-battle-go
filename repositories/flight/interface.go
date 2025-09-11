@@ -16,4 +16,5 @@ type FlightRepository interface {
 	FindFlightRoutesByCity(cityID uint) (flightRoutes []flight_model.FlightRoute, err error)
 	FindFlightRoutesByCities(departureCityID, destinationCityID uint) (flightRoute []flight_model.FlightRoute, err error)
 	FindFlightRouteSeats(flightRouteID uint) (flightRouteSeats []flight_model.FlightRouteSeat, err error)
+	InsertFlightRouteSeat(in flight_model.FlightRouteSeat) error
 }

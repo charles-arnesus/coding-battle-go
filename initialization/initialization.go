@@ -34,7 +34,7 @@ func Start() {
 
 	authenticationService := authentication_service.NewAuthenticationService(userRepository)
 	flightService := flight_service.NewFlightService(flightRepository)
-	bookingService := booking_service.NewBookingRepository(bookingRepository)
+	bookingService := booking_service.NewBookingRepository(bookingRepository, flightRepository)
 	systemOperationService := system_operation_service.NewSystemOperationService(systemOperationRepository)
 
 	handler := handler.NewHandler()
@@ -46,7 +46,7 @@ func Start() {
 	handler.RegisterCommand(admin_command.NewGoToNextDayCommand(systemOperationService, flightService))
 
 	// Register passenger command
-	handler.RegisterCommand(passenger_command.NewBookFlightCommand(bookingService, flightService, systemOperationService))
+	handler.RegisterCommand(passenger_command.NewBookFlightCommand(authenticationService, bookingService, flightService, systemOperationService))
 	handler.RegisterCommand(passenger_command.NewCancelFlightCommand(bookingService))
 
 	// ini nanti panggil function logged user yang di auth service

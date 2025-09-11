@@ -12,7 +12,6 @@ type BookingSystem struct {
 
 type Booking struct {
 	gorm.Model
-	Code string `gorm:"uniqueIndex; not null"`
 }
 
 type BookingFlightRoute struct {
@@ -21,4 +20,15 @@ type BookingFlightRoute struct {
 	FlightRouteID uint
 	Booking       Booking                  `gorm:"foreignKey:BookingID;"`
 	FlightRoute   flight_model.FlightRoute `gorm:"foreignKey:FlightRouteID;"`
+}
+
+type SaveBookingRequest struct {
+	FlightRoutes []flight_model.FlightRoute
+	UserID       uint
+}
+
+type SaveBookingResponse struct {
+	BookingID        uint
+	FlightRoutes     []flight_model.FlightRoute
+	FligthRouteSeats []flight_model.FlightRouteSeat
 }

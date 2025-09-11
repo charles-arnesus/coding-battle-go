@@ -6,7 +6,9 @@ import (
 	"os"
 	"strings"
 
+	booking_model "github.com/charles-arnesus/coding-battle-go/models/booking"
 	flight_model "github.com/charles-arnesus/coding-battle-go/models/flight"
+	authentication_service "github.com/charles-arnesus/coding-battle-go/services/authentication"
 	booking_service "github.com/charles-arnesus/coding-battle-go/services/booking"
 	flight_service "github.com/charles-arnesus/coding-battle-go/services/flight"
 	system_operation_service "github.com/charles-arnesus/coding-battle-go/services/systemOperation"
@@ -14,21 +16,25 @@ import (
 )
 
 type BookFlightCommand struct {
-	bookingService  booking_service.BookingService
-	flightService   flight_service.FlightService
-	systemOperation system_operation_service.SystemOperationService
+	authenticationService authentication_service.AuthenticationService
+	bookingService        booking_service.BookingService
+	flightService         flight_service.FlightService
+	systemOperation       system_operation_service.SystemOperationService
 }
 
-func NewBookFlightCommand(bookingService booking_service.BookingService, flightService flight_service.FlightService, systemOperation system_operation_service.SystemOperationService) *BookFlightCommand {
+func NewBookFlightCommand(authenticationService authentication_service.AuthenticationService, bookingService booking_service.BookingService, flightService flight_service.FlightService, systemOperation system_operation_service.SystemOperationService) *BookFlightCommand {
 	return &BookFlightCommand{
-		bookingService:  bookingService,
-		flightService:   flightService,
-		systemOperation: systemOperation,
+		authenticationService: authenticationService,
+		bookingService:        bookingService,
+		flightService:         flightService,
+		systemOperation:       systemOperation,
 	}
 }
 
 func (h *BookFlightCommand) Execute() (err error) {
 	currentDay := h.systemOperation.GetCurrentDay()
+	transitRoutes := []flight_model.GetAvailableFlightRouteResponse{}
+	bookedRoutes := []flight_model.FlightRoute{}
 	// check if booking service system is enabled
 	bookingSystem, err := h.bookingService.GetBookingSystem()
 	if err != nil {
@@ -119,30 +125,117 @@ func (h *BookFlightCommand) Execute() (err error) {
 		return
 	}
 
-	getAvailableFlightRouteDto := flight_model.GetAvailableFlightRouteDto{
+	getAvailableFlightRouteRequest := flight_model.GetAvailableFlightRouteRequest{
 		DepartureCityID:   departureCityObj[0].ID,
 		DestinationCityID: destinationCityObj[0].ID,
 		CurrentDay:        currentDay,
 	}
 
-	directRoute, err := h.flightService.GetAvailableFlightRoute(getAvailableFlightRouteDto)
+	getAvailableFlightRouteResponse, err := h.flightService.GetAvailableFlightRoute(getAvailableFlightRouteRequest)
 	if err != nil {
 		err = utils.ErrSomethingWentWrongGet
 		return
 	}
 
-	if directRoute.ID == 0 {
-		// flightRoutes, errGetFlightRoutesByCity := h.flightService.GetFlightRoutesByCity(departureCityObj[0].ID)
-		// if errGetFlightRoutesByCity != nil {
-		// 	err = utils.ErrSomethingWentWrongGet
-		// 	return err
-		// }
-		// h.flightService.GetAvailableFlightRoute(departureCityObj[0].ID, destinationCityObj[0].ID)
+	if getAvailableFlightRouteResponse.FlightRoute.ID == 0 {
+		fmt.Println(utils.NoDirectFlightFoundMsg)
 
-		fmt.Println("no direct routes")
+		getAvailableFlightRoutesByCityRequest := flight_model.GetAvailableFlightRoutesByCityRequest{
+			DepartureCityID: departureCityObj[0].ID,
+			CurrentDay:      currentDay,
+		}
+		availableFlightRoutesByCity, errGetAvailableFlightRoutesByCity := h.flightService.GetAvailableFlightRoutesByCity(getAvailableFlightRoutesByCityRequest)
+		if errGetAvailableFlightRoutesByCity != nil {
+			err = utils.ErrSomethingWentWrongGet
+			return err
+		}
+		for _, flightRoute := range availableFlightRoutesByCity.GetAvailableFlightRouteResponses {
+			req := flight_model.GetAvailableFlightRouteRequest{
+				DepartureCityID:   flightRoute.FlightRoute.DestinationCityID,
+				DestinationCityID: destinationCityObj[0].ID,
+				CurrentDay:        flightRoute.FlightRoute.ScheduledDay - 1,
+			}
+			resp, err := h.flightService.GetAvailableFlightRoute(req)
+			if err != nil {
+				return err
+			}
+
+			if resp.FlightRoute.ID == 0 {
+				continue
+			}
+
+			transitRoutes = append(transitRoutes, flightRoute, resp)
+			bookedRoutes = append(bookedRoutes, flightRoute.FlightRoute, resp.FlightRoute)
+		}
+
+		if len(transitRoutes) > 0 {
+			fmt.Printf(utils.TransitFlightFoundMessage,
+				transitRoutes[0].FlightRoute.DepartureCity.Name,
+				transitRoutes[0].FlightRoute.DestinationCity.Name,
+				transitRoutes[1].FlightRoute.DestinationCity.Name,
+				transitRoutes[0].FlightRoute.ScheduledDay)
+			for _, transiteRoute := range transitRoutes {
+				fmt.Printf(utils.AvailableSeatsMessage,
+					transiteRoute.AvailableSeats,
+					transiteRoute.FlightRoute.DepartureCity.Name,
+					transiteRoute.FlightRoute.DestinationCity.Name)
+			}
+		}
+	} else {
+		fmt.Printf(utils.DirectFlightFoundMessage,
+			getAvailableFlightRouteResponse.FlightRoute.DepartureCity.Name,
+			getAvailableFlightRouteResponse.FlightRoute.DestinationCity.Name,
+			getAvailableFlightRouteResponse.FlightRoute.ScheduledDay)
+		fmt.Printf(utils.AvailableSeatsMessage,
+			getAvailableFlightRouteResponse.AvailableSeats,
+			getAvailableFlightRouteResponse.FlightRoute.DepartureCity.Name,
+			getAvailableFlightRouteResponse.FlightRoute.DestinationCity.Name)
+		bookedRoutes = append(bookedRoutes, getAvailableFlightRouteResponse.FlightRoute)
 	}
 
-	fmt.Println(directRoute)
+	if getAvailableFlightRouteResponse.FlightRoute.ID == 0 && len(transitRoutes) == 0 {
+		fmt.Println(utils.NoFlightFoundMsg)
+		return
+	}
+
+	fmt.Print("Confirm booking? (y/n): ")
+	input, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println(utils.ErrInputInvalid)
+		return
+	}
+	if !utils.ContainsString([]string{utils.Yes, utils.No}, strings.ToLower(strings.TrimSpace(input))) {
+		fmt.Println(utils.ErrInputInvalid)
+		return
+	}
+
+	if strings.TrimSpace(input) == utils.No {
+		err = utils.ErrBookingCancelledMsg
+		return
+	}
+
+	loggedUser := h.authenticationService.GetLoggedUser()
+
+	saveBookingRequest := booking_model.SaveBookingRequest{
+		FlightRoutes: bookedRoutes,
+		UserID:       loggedUser.ID,
+	}
+	bookingResponse, err := h.bookingService.SaveBooking(saveBookingRequest)
+	if err != nil {
+		return
+	}
+
+	fmt.Printf(utils.BookingSuccessMessage, bookingResponse.BookingID)
+	for _, flightRoute := range bookingResponse.FlightRoutes {
+		for _, flightRouteSeat := range bookingResponse.FligthRouteSeats {
+			if flightRoute.ID == flightRouteSeat.FlightRouteID {
+				fmt.Printf(utils.BookingDetailMessage,
+					flightRouteSeat.SeatNumber,
+					flightRoute.DepartureCity.Name,
+					flightRoute.DestinationCity.Name)
+			}
+		}
+	}
 
 	return
 }

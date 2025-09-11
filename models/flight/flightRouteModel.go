@@ -31,8 +31,22 @@ type AddFlightRouteDTO struct {
 	CurrentDay  int
 }
 
-type GetAvailableFlightRouteDto struct {
+type GetAvailableFlightRouteRequest struct {
 	DepartureCityID   uint
 	DestinationCityID uint
 	CurrentDay        int
+}
+
+type GetAvailableFlightRouteResponse struct {
+	FlightRoute    FlightRoute
+	AvailableSeats int
+}
+
+type GetAvailableFlightRoutesByCityRequest struct {
+	DepartureCityID uint
+	CurrentDay      int
+}
+
+type GetAvailableFlightRoutesByCityResponse struct {
+	GetAvailableFlightRouteResponses []GetAvailableFlightRouteResponse
 }

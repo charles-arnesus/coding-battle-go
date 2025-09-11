@@ -7,9 +7,9 @@ import (
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
 
-func (s *flightService) GetAvailableFlightRoute(in flight_model.GetAvailableFlightRouteRequest) (flight_model.GetAvailableFlightRouteResponse, error) {
-	response := flight_model.GetAvailableFlightRouteResponse{}
-	flightRoutes, err := s.flightRepository.FindFlightRoutesByCities(in.DepartureCityID, in.DestinationCityID)
+func (s *flightService) GetAvailableFlightRoutesByCity(in flight_model.GetAvailableFlightRoutesByCityRequest) (flight_model.GetAvailableFlightRoutesByCityResponse, error) {
+	response := flight_model.GetAvailableFlightRoutesByCityResponse{}
+	flightRoutes, err := s.flightRepository.FindFlightRoutesByCity(in.DepartureCityID)
 	if err != nil {
 		return response, err
 	}
@@ -29,11 +29,15 @@ func (s *flightService) GetAvailableFlightRoute(in flight_model.GetAvailableFlig
 
 		availableSeats := int(aircraft.Seats) - len(flightRouteSeats)
 		if availableSeats > 0 && !slices.Contains(utils.UnavailableFlightStatus, flightRoute.Status) {
-			response.FlightRoute = flightRoute
-			response.AvailableSeats = availableSeats
-			break
+			availableRoute := flight_model.GetAvailableFlightRouteResponse{
+				FlightRoute:    flightRoute,
+				AvailableSeats: availableSeats,
+			}
+			response.GetAvailableFlightRouteResponses = append(
+				response.GetAvailableFlightRouteResponses,
+				availableRoute,
+			)
 		}
 	}
-
 	return response, err
 }
