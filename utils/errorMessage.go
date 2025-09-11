@@ -24,6 +24,7 @@ const BookingServiceDisabledMsg = "booking service is disabled. contact admin to
 const NoDirectFlightFoundMsg = "No direct flights found, searching for transit options..."
 const NoFlightFoundMsg = "No flights found for this route"
 const BookingCancelledMsg = "booking cancelled"
+const NoSeatsAvailableMsg = "no seats available"
 
 // error object
 var ErrInputInvalid = errors.New(InputInvalidMessage)
@@ -42,6 +43,7 @@ var ErrRecordNotFound = errors.New(RecordNotFoundMessage)
 var ErrDepartureDestinationSame = errors.New(DepartureDestinationSameMessage)
 var ErrBookingServiceDisabledMsg = errors.New(BookingServiceDisabledMsg)
 var ErrBookingCancelledMsg = errors.New(BookingCancelledMsg)
+var ErrNoSeatsAvailableMsg = errors.New(NoSeatsAvailableMsg)
 
 // error code message
 const UniqueViolationCodePostgres = "23505"
