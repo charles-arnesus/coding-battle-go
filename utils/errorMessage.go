@@ -20,6 +20,7 @@ const DestinationsDataEmptyMessage = "the data destination is still empty"
 const AircraftDataEmptyMessage = "the data aircraft is still empty"
 const ScheduledDayInvalidMessage = "the scheduled day should be between current day (%d) - (%d)"
 const DepartureDestinationSameMessage = "the departure and destination city should be different"
+const BookingServiceDisabledMsg = "booking service is disabled. contact admin to enable booking service"
 
 // error object
 var ErrInputInvalid = errors.New(InputInvalidMessage)
@@ -36,6 +37,7 @@ var ErrDestinationsDataEmpty = errors.New(DestinationsDataEmptyMessage)
 var ErrAircraftDataEmpty = errors.New(AircraftDataEmptyMessage)
 var ErrRecordNotFound = errors.New(RecordNotFoundMessage)
 var ErrDepartureDestinationSame = errors.New(DepartureDestinationSameMessage)
+var ErrBookingServiceDisabledMsg = errors.New(BookingServiceDisabledMsg)
 
 // error code message
 const UniqueViolationCodePostgres = "23505"
