@@ -9,16 +9,19 @@ import (
 
 	flight_model "github.com/charles-arnesus/coding-battle-go/models/flight"
 	flight_service "github.com/charles-arnesus/coding-battle-go/services/flight"
+	system_operation_service "github.com/charles-arnesus/coding-battle-go/services/systemOperation"
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
 
 type CreateFlightRouteCommand struct {
-	flightService flight_service.FlightService
+	flightService   flight_service.FlightService
+	systemOperation system_operation_service.SystemOperationService
 }
 
-func NewCreateFlightRouteCommand(flightService flight_service.FlightService) *CreateFlightRouteCommand {
+func NewCreateFlightRouteCommand(flightService flight_service.FlightService, systemOperation system_operation_service.SystemOperationService) *CreateFlightRouteCommand {
 	return &CreateFlightRouteCommand{
-		flightService: flightService,
+		flightService:   flightService,
+		systemOperation: systemOperation,
 	}
 }
 
@@ -62,7 +65,7 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 	fmt.Printf("Available aircraft: %s\n", strings.Join(aircraftsStrings, ","))
 
 	fmt.Println()
-	fmt.Print("Enter departure city:")
+	fmt.Print("Enter departure city: ")
 	departureCity, err := reader.ReadString('\n')
 	if err != nil {
 		err = utils.ErrInputInvalid
@@ -80,7 +83,7 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 		return
 	}
 
-	fmt.Print("Enter destination city:")
+	fmt.Print("Enter destination city: ")
 	destinationCity, err := reader.ReadString('\n')
 	if err != nil {
 		err = utils.ErrInputInvalid
@@ -121,7 +124,8 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 		return
 	}
 
-	fmt.Printf("Enter scheduled Day [1 (current day) - %d]: ", utils.MaxDaysInYear)
+	currentDay := h.systemOperation.GetCurrentDay()
+	fmt.Printf("Enter scheduled Day [%d (current day) - %d]: ", currentDay, utils.MaxDaysInYear)
 	scheduledDayStr, err := reader.ReadString('\n')
 	if err != nil {
 		err = utils.ErrInputInvalid
@@ -136,7 +140,11 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 		ScheduledDay:    scheduledDay,
 	}
 
-	err = h.flightService.AddFlightRoute(flightRoute)
+	err = h.flightService.AddFlightRoute(flight_model.AddFlightRouteDTO{
+		FlightRoute: flightRoute,
+		CurrentDay:  currentDay,
+	})
+
 	if err == nil {
 		fmt.Printf(utils.CreateFlightRouteSuccessMessage, departureCity, destinationCity, aircraftName, scheduledDay)
 	}

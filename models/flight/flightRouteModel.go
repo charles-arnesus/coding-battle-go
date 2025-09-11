@@ -14,3 +14,8 @@ type FlightRoute struct {
 	DestinationCity   Destination `gorm:"foreignKey:DestinationCityID;"`
 	ScheduledDay      int         `gorm:"not null"`
 }
+
+type AddFlightRouteDTO struct {
+	FlightRoute FlightRoute
+	CurrentDay  int
+}
