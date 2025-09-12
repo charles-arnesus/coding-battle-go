@@ -4,12 +4,12 @@ import (
 	flight_model "github.com/charles-arnesus/coding-battle-go/models/flight"
 )
 
-func (r *flightRepository) FindFlightRoutesByCities(departurecityID, destinationCityID uint) (flightRoutes []flight_model.FlightRoute, err error) {
+func (r *flightRepository) FindFlightRoutesByCities(departureCityID, destinationCityID uint, departureDay int, departureTime string) (flightRoutes []flight_model.FlightRoute, err error) {
 	err = r.db.
 		Preload("Aircraft").
 		Preload("DepartureCity").
 		Preload("DestinationCity").
-		Find(&flightRoutes, "departure_city_id = ? AND destination_city_id = ?", departurecityID, destinationCityID).
+		Find(&flightRoutes, "departure_city_id = ? AND destination_city_id = ? AND departure_day = ? AND departure_time = ?", departureCityID, destinationCityID, departureDay, departureTime).
 		Order("scheduled_day, aircraft_id, departure_city_id").
 		Error
 

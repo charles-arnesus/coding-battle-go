@@ -125,19 +125,47 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 	}
 
 	currentDay := h.systemOperation.GetCurrentDay()
-	fmt.Printf("Enter scheduled Day [%d (current day) - %d]: ", currentDay, utils.MaxDaysInYear)
-	scheduledDayStr, err := reader.ReadString('\n')
+	fmt.Printf("Enter departure Day [%d (current day) - %d]: ", currentDay, utils.MaxDaysInYear)
+	departureDayStr, err := reader.ReadString('\n')
 	if err != nil {
 		err = utils.ErrInputInvalid
 		return
 	}
-	scheduledDay, _ := strconv.Atoi(strings.TrimSpace(scheduledDayStr))
+	departureDay, _ := strconv.Atoi(strings.TrimSpace(departureDayStr))
+
+	fmt.Printf("Enter departure time [%s/%s]: ", utils.MORNING, utils.EVENING)
+	departureTimeStr, err := reader.ReadString('\n')
+	if err != nil {
+		err = utils.ErrInputInvalid
+		return
+	}
+	departureTime := strings.ToUpper(strings.TrimSpace(departureTimeStr))
+
+	if !utils.ContainsString([]string{utils.MORNING, utils.EVENING}, departureTime) {
+		fmt.Println(utils.ErrInputInvalid)
+		return
+	}
+
+	var arrivalDay int
+	var arrivalTime string
+	if departureTime == utils.EVENING {
+		arrivalDay = departureDay + 1
+		arrivalTime = utils.MORNING
+		departureTime = utils.EVENING
+	} else {
+		arrivalDay = departureDay
+		arrivalTime = utils.EVENING
+		departureTime = utils.MORNING
+	}
 
 	flightRoute := flight_model.FlightRoute{
 		Aircraft:        aircraftObj[0],
 		DepartureCity:   departureCityObj[0],
 		DestinationCity: destinationCityObj[0],
-		ScheduledDay:    scheduledDay,
+		DepartureTime:   departureTime,
+		ArrivalTime:     arrivalTime,
+		DepartureDay:    departureDay,
+		ArrivalDay:      arrivalDay,
 		Status:          utils.SCHEDULED,
 	}
 
@@ -147,7 +175,7 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 	})
 
 	if err == nil {
-		fmt.Printf(utils.CreateFlightRouteSuccessMessage, departureCity, destinationCity, aircraftName, scheduledDay)
+		fmt.Printf(utils.CreateFlightRouteSuccessMessage, departureCity, destinationCity, aircraftName, departureDay, departureTime)
 	}
 
 	return

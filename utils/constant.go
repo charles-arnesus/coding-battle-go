@@ -43,6 +43,10 @@ const ARRIVED = "ARRIVED"
 const Yes = "y"
 const No = "n"
 
+// schedule time
+const MORNING = "MORNING"
+const EVENING = "EVENING"
+
 var MenuAdmin = []string{
 	RegisterAircraftLabel, AddDestinationLabel, CreateFlightRouteLabel, RunBookingServiceLabel, GoToNextDayLabel, RunFlightLabel,
 }

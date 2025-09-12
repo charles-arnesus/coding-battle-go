@@ -11,12 +11,12 @@ import (
 func (s *flightService) AddFlightRoute(in flight_model.AddFlightRouteDTO) (err error) {
 
 	// should between current day - max in year
-	isPreviousDay := in.FlightRoute.ScheduledDay < in.CurrentDay
+	isPreviousDay := in.FlightRoute.DepartureDay < in.CurrentDay
 	if in.CurrentDay == utils.MaxDaysInYear {
 		isPreviousDay = false
 	}
 
-	if isPreviousDay || in.FlightRoute.ScheduledDay > utils.MaxDaysInYear {
+	if isPreviousDay || in.FlightRoute.DepartureDay > utils.MaxDaysInYear {
 		errMessage := fmt.Sprintf(utils.ScheduledDayInvalidMessage, in.CurrentDay, utils.MaxDaysInYear)
 		err = errors.New(errMessage)
 		return

@@ -9,12 +9,12 @@ import (
 
 func (s *flightService) GetAvailableFlightRoute(in flight_model.GetAvailableFlightRouteRequest) (flight_model.GetAvailableFlightRouteResponse, error) {
 	response := flight_model.GetAvailableFlightRouteResponse{}
-	flightRoutes, err := s.flightRepository.FindFlightRoutesByCities(in.DepartureCityID, in.DestinationCityID)
+	flightRoutes, err := s.flightRepository.FindFlightRoutesByCities(in.DepartureCityID, in.DestinationCityID, in.DepartureDay, in.DepartureTime)
 	if err != nil {
 		return response, err
 	}
 	for _, flightRoute := range flightRoutes {
-		if flightRoute.ScheduledDay <= in.CurrentDay {
+		if flightRoute.DepartureDay <= in.CurrentDay {
 			continue
 		}
 		aircraft, err := s.flightRepository.FindAircraftByID(flightRoute.AircraftID)
