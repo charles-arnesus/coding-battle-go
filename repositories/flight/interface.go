@@ -6,7 +6,12 @@ type FlightRepository interface {
 	InsertAircraft(aircraft flight_model.Aircraft) error
 	InsertDestination(destination flight_model.Destination) error
 	InsertFlightRoute(flightRoute flight_model.FlightRoute) (err error)
+	InsertFlightRouteSeat(in flight_model.FlightRouteSeat) error
 
+	flightRepositoryRead
+}
+
+type flightRepositoryRead interface {
 	GetAllAircraft() (aircrafts []flight_model.Aircraft, err error)
 	GetAllDestinations() (destinations []flight_model.Destination, err error)
 	FindAircraftByName(name string) (aircraft flight_model.Aircraft, err error)
@@ -22,4 +27,5 @@ type FlightRepository interface {
 	FindTakenFlightRouteSeats(flightRouteID uint) (takenSeats []int, err error)
 	InsertFlightRouteSeat(in flight_model.FlightRouteSeat) error
 	DeleteFlightRouteSeats(flightRouteSeatIDs []uint) error
+	FindFlightRouteByParams(in flight_model.GetFlightRouteByRequest) (flightRoute []flight_model.FlightRoute, err error)
 }

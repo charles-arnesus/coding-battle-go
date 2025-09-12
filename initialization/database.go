@@ -9,18 +9,17 @@ import (
 	user_model "github.com/charles-arnesus/coding-battle-go/models/user"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 func dbInitialization() *gorm.DB {
 	username := "myuser"
 	password := "mypassword"
 	dbName := "mydb"
-	dsn := fmt.Sprintf("host=localhost user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Jakarta", username, password, dbName)
+	dsn := fmt.Sprintf("host=localhost user=%s password=%s dbname=%s port=5435 sslmode=disable TimeZone=Asia/Jakarta", username, password, dbName)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		TranslateError:         false,
 		SkipDefaultTransaction: true,
-		Logger:                 logger.Default.LogMode(logger.Silent),
+		//Logger:                 logger.Default.LogMode(logger.Silent),
 	})
 
 	if err != nil {
@@ -47,14 +46,14 @@ func dbInitialization() *gorm.DB {
 func migrateDB(db *gorm.DB) (err error) {
 	// jangan lupa hapus droptable
 	// untuk testing
-	db.Migrator().DropTable(&flight_model.Aircraft{})
-	db.Migrator().DropTable(&flight_model.Destination{})
-	db.Migrator().DropTable(&flight_model.FlightRoute{})
-	db.Migrator().DropTable(&flight_model.FlightRouteSeat{})
-	db.Migrator().DropTable(&user_model.User{})
-	db.Migrator().DropTable(&booking_model.BookingSystem{})
-	db.Migrator().DropTable(&booking_model.Booking{})
-	db.Migrator().DropTable(&booking_model.BookingFlightRoute{})
+	// db.Migrator().DropTable(&flight_model.Aircraft{})
+	// db.Migrator().DropTable(&flight_model.Destination{})
+	// db.Migrator().DropTable(&flight_model.FlightRoute{})
+	// db.Migrator().DropTable(&flight_model.FlightRouteSeat{})
+	// db.Migrator().DropTable(&user_model.User{})
+	// db.Migrator().DropTable(&booking_model.BookingSystem{})
+	// db.Migrator().DropTable(&booking_model.Booking{})
+	// db.Migrator().DropTable(&booking_model.BookingFlightRoute{})
 
 	err = db.AutoMigrate(
 		&flight_model.Aircraft{},
