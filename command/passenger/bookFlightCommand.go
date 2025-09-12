@@ -128,6 +128,9 @@ func (h *BookFlightCommand) Execute() (err error) {
 	}
 
 	possibleDay := currentDay + 1
+	if possibleDay >= utils.MaxDaysInYear {
+		possibleDay = 1
+	}
 	fmt.Printf("Enter departure Day [%d - %d]: ", possibleDay, utils.MaxDaysInYear)
 	departureDayStr, err := reader.ReadString('\n')
 	if err != nil {
