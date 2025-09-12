@@ -17,6 +17,7 @@ var AdminAddDestinationID = fmt.Sprintf("%s_2", RoleAdmin)
 var AdminCreateFligthRouteID = fmt.Sprintf("%s_3", RoleAdmin)
 var AdminSetBookingSystemID = fmt.Sprintf("%s_4", RoleAdmin)
 var AdminGoToNextDaySystemID = fmt.Sprintf("%s_5", RoleAdmin)
+var AdminRunFlightID = fmt.Sprintf("%s_6", RoleAdmin)
 
 // passenger
 var PassengerBookFlightID = fmt.Sprintf("%s_1", RolePassenger)
@@ -38,6 +39,7 @@ const CancelABookingLabel = "Cancel a Booking"
 const SCHEDULED = "SCHEDULED"
 const DEPARTED = "DEPARTED"
 const ARRIVED = "ARRIVED"
+const CANCELLED = "CANCELLED"
 
 // yes no
 const Yes = "y"

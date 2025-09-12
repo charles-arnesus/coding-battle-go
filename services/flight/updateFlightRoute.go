@@ -8,7 +8,7 @@ import (
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
 
-func (s *flightService) AddFlightRoute(in flight_model.UpsertFlightRouteRequest) (err error) {
+func (s *flightService) UpdateFlightRouteStatus(in flight_model.UpsertFlightRouteRequest) (err error) {
 
 	// should between current day - max in year
 	isPreviousDay := in.FlightRoute.DepartureDay < in.CurrentDay
@@ -22,7 +22,7 @@ func (s *flightService) AddFlightRoute(in flight_model.UpsertFlightRouteRequest)
 		return
 	}
 
-	err = s.flightRepository.InsertFlightRoute(in.FlightRoute)
+	err = s.flightRepository.UpdateFlightRouteStatus(in.FlightRoute)
 
 	return
 }

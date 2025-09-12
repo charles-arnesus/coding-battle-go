@@ -76,7 +76,7 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 		Status:          utils.SCHEDULED,
 	}
 
-	err = h.flightService.AddFlightRoute(flight_model.AddFlightRouteRequest{
+	err = h.flightService.AddFlightRoute(flight_model.UpsertFlightRouteRequest{
 		FlightRoute: flightRoute,
 		CurrentDay:  currentDay,
 	})
@@ -191,6 +191,9 @@ func (h *CreateFlightRouteCommand) cityInputSection(reader *bufio.Reader) (depar
 
 func scheduledTimeSection(currentDay int, reader *bufio.Reader) (departureDay, arrivalDay int, departureTime, arrivalTime string, err error) {
 	possibleDay := currentDay + 1
+	if possibleDay >= utils.MaxDaysInYear {
+		possibleDay = 1
+	}
 	fmt.Printf("Enter departure day [%d - %d]: ", possibleDay, utils.MaxDaysInYear)
 	departureDayStr, err := reader.ReadString('\n')
 	if err != nil {

@@ -44,6 +44,7 @@ func Start() {
 	handler.RegisterCommand(admin_command.NewCreateFlightRouteCommand(flightService, systemOperationService))
 	handler.RegisterCommand(admin_command.NewSetBookingSystemCommand(bookingService))
 	handler.RegisterCommand(admin_command.NewGoToNextDayCommand(systemOperationService, flightService))
+	handler.RegisterCommand(admin_command.NewRunFlightCommand(systemOperationService, flightService))
 
 	// Register passenger command
 	handler.RegisterCommand(passenger_command.NewBookFlightCommand(authenticationService, bookingService, flightService, systemOperationService))

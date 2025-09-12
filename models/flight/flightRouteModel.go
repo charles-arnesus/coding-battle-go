@@ -18,6 +18,7 @@ type FlightRoute struct {
 	DepartureDay      int         `gorm:"not null;uniqueIndex:idx_departure_arrival_aircraft"`
 	ArrivalDay        int         `gorm:"not null"`
 	Status            string      `gorm:"not null"`
+	FlightRouteSeat   []*FlightRouteSeat
 }
 
 type FlightRouteSeat struct {
@@ -29,7 +30,7 @@ type FlightRouteSeat struct {
 	User          user_model.User `gorm:"foreignKey:UserID;"`
 }
 
-type AddFlightRouteRequest struct {
+type UpsertFlightRouteRequest struct {
 	FlightRoute FlightRoute
 	CurrentDay  int
 }
@@ -63,5 +64,6 @@ type GetFlightRouteByRequest struct {
 	DepartureDay    int
 	DepartureCity   uint
 	DestinationCity uint
-	FlightTime      string
+	DepartureTime   string
+	Status          string
 }

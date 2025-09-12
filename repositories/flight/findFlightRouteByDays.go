@@ -9,8 +9,10 @@ func (r *flightRepository) FindFlightRoutesByDay(minDay, maxDay int) (flightRout
 		Preload("Aircraft").
 		Preload("DepartureCity").
 		Preload("DestinationCity").
-		Find(&flightRoutes, "scheduled_day >= ? AND scheduled_day <= ?", minDay, maxDay).
-		Order("scheduled_day, aircraft_id, departure_city_id").
+		Preload("FlightRouteSeat").
+		Preload("FlightRouteSeat.User").
+		Find(&flightRoutes, "departure_day >= ? AND departure_day <= ?", minDay, maxDay).
+		Order("departure_day, aircraft_id, departure_city_id").
 		Error
 
 	return
