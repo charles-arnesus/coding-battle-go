@@ -9,4 +9,6 @@ type BookingRepository interface {
 	SaveBookingFlightRoute(in booking_model.BookingFlightRoute) (err error)
 	FindBookingFlightRoutesByBookingID(bookingID uint) (bookingFlightRoutes []booking_model.BookingFlightRoute, err error)
 	FindBookingFlightRoutesByFlightRouteID(FlightRouteID uint) (bookingFlightRoute booking_model.BookingFlightRoute, err error)
+	DeleteBookingFlightRoutes(bookingFlightRouteIDs []uint) error
+	DeleteBookings(bookingIDs []uint) error
 }

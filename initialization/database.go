@@ -9,17 +9,18 @@ import (
 	user_model "github.com/charles-arnesus/coding-battle-go/models/user"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func dbInitialization() *gorm.DB {
-	username := "myuser"
-	password := "mypassword"
-	dbName := "mydb"
-	dsn := fmt.Sprintf("host=localhost user=%s password=%s dbname=%s port=5435 sslmode=disable TimeZone=Asia/Jakarta", username, password, dbName)
+	username := "codingbattlego"
+	password := "codingbattlego123"
+	dbName := "codingbattlego"
+	dsn := fmt.Sprintf("host=postgres user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Jakarta", username, password, dbName)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		TranslateError:         false,
 		SkipDefaultTransaction: true,
-		//Logger:                 logger.Default.LogMode(logger.Silent),
+		Logger:                 logger.Default.LogMode(logger.Silent),
 	})
 
 	if err != nil {
@@ -55,19 +56,24 @@ func migrateDB(db *gorm.DB) (err error) {
 	// db.Migrator().DropTable(&booking_model.Booking{})
 	// db.Migrator().DropTable(&booking_model.BookingFlightRoute{})
 
+	if !db.Migrator().HasTable(&user_model.User{}) {
+		db.AutoMigrate(&user_model.User{}) // create table
+		db.Create(&user_model.User{Username: "admin", Name: "admin", Role: "admin"})
+	}
+
+	if !db.Migrator().HasTable(&booking_model.BookingSystem{}) {
+		db.AutoMigrate(&booking_model.BookingSystem{})
+		db.Create(&booking_model.BookingSystem{IsActive: false})
+	}
+
 	err = db.AutoMigrate(
 		&flight_model.Aircraft{},
 		&flight_model.Destination{},
 		&flight_model.FlightRoute{},
 		&flight_model.FlightRouteSeat{},
-		&user_model.User{},
-		&booking_model.BookingSystem{},
 		&booking_model.Booking{},
 		&booking_model.BookingFlightRoute{},
 	)
-
-	db.Create(&user_model.User{Username: "admin", Name: "admin", Role: "admin"})
-	db.Create(&booking_model.BookingSystem{IsActive: false})
 
 	return
 }
