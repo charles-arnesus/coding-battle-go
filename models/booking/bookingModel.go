@@ -32,3 +32,14 @@ type SaveBookingResponse struct {
 	FlightRoutes     []flight_model.FlightRoute
 	FligthRouteSeats []flight_model.FlightRouteSeat
 }
+
+type GetBookingDetailsResponse struct {
+	BookingDetails []BookingDetail
+}
+
+type BookingDetail struct {
+	BookingID           uint
+	BookingFlightRoutes []BookingFlightRoute
+	FlightRoutes        []flight_model.FlightRoute
+	FlightRouteSeats    []flight_model.FlightRouteSeat
+}

@@ -25,6 +25,9 @@ const NoDirectFlightFoundMsg = "No direct flights found, searching for transit o
 const NoFlightFoundMsg = "No flights found for this route"
 const BookingCancelledMsg = "booking cancelled"
 const NoSeatsAvailableMsg = "no seats available"
+const NoActiveBookingMsg = "you do not have any active booking"
+const DuplicateFlightRouteBookingMsg = "you already book this flight route"
+const DuplicateFlightRouteMsg = "this aircraft already have schedule in selected departure day and time"
 
 // error object
 var ErrInputInvalid = errors.New(InputInvalidMessage)
@@ -36,6 +39,8 @@ var ErrNameAircraftAlreadyExist = errors.New(NameAircraftAlreadyExistMessage)
 var ErrNameDestinationAlreadyExist = errors.New(NameDestinationAlreadyExistMessage)
 var ErrNameDestinationRequired = errors.New(NameDestinationRequiredMsg)
 var ErrUsernameAlreadyExistMsg = errors.New(UsernameAlreadyExistMessage)
+var ErrDuplicateFlightRouteBookingMsg = errors.New(DuplicateFlightRouteBookingMsg)
+var ErrDuplicateFlightRouteMsg = errors.New(DuplicateFlightRouteMsg)
 var ErrSomethingWentWrongGet = errors.New(SomethingWentWrongGetMessage)
 var ErrDestinationsDataEmpty = errors.New(DestinationsDataEmptyMessage)
 var ErrAircraftDataEmpty = errors.New(AircraftDataEmptyMessage)

@@ -36,13 +36,13 @@ func (h *GoToNextDayCommand) Execute() (err error) {
 
 	strDay := ""
 	for _, flightRoute := range flightRoutes {
-		switch flightRoute.ScheduledDay {
+		switch flightRoute.DepartureDay {
 		case currentDay:
 			strDay = "today"
 		case currentDay + 1:
 			strDay = "tomorrow"
 		default:
-			strDay = fmt.Sprintf("Day %d", flightRoute.ScheduledDay)
+			strDay = fmt.Sprintf("Day %d", flightRoute.DepartureDay)
 		}
 
 		fmt.Printf("Flight %s -> %s is scheduled for %s.\n", flightRoute.DepartureCity.Name, flightRoute.DestinationCity.Name, strDay)

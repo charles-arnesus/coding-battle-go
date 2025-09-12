@@ -2,8 +2,10 @@ package command
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	booking_model "github.com/charles-arnesus/coding-battle-go/models/booking"
@@ -125,10 +127,39 @@ func (h *BookFlightCommand) Execute() (err error) {
 		return
 	}
 
+	fmt.Printf("Enter departure Day [%d (current day) - %d]: ", currentDay, utils.MaxDaysInYear)
+	departureDayStr, err := reader.ReadString('\n')
+	if err != nil {
+		err = utils.ErrInputInvalid
+		return
+	}
+	departureDay, _ := strconv.Atoi(strings.TrimSpace(departureDayStr))
+
+	fmt.Printf("Enter departure time [%s/%s]: ", utils.MORNING, utils.EVENING)
+	departureTimeStr, err := reader.ReadString('\n')
+	if err != nil {
+		err = utils.ErrInputInvalid
+		return
+	}
+	departureTime := strings.ToUpper(strings.TrimSpace(departureTimeStr))
+
+	if !utils.ContainsString([]string{utils.MORNING, utils.EVENING}, departureTime) {
+		fmt.Println(utils.ErrInputInvalid)
+		return
+	}
+
+	if departureDay <= currentDay {
+		errMessage := fmt.Sprintf(utils.ScheduledDayInvalidMessage, currentDay+1, utils.MaxDaysInYear)
+		err = errors.New(errMessage)
+		return
+	}
+
 	getAvailableFlightRouteRequest := flight_model.GetAvailableFlightRouteRequest{
 		DepartureCityID:   departureCityObj[0].ID,
 		DestinationCityID: destinationCityObj[0].ID,
 		CurrentDay:        currentDay,
+		DepartureDay:      departureDay,
+		DepartureTime:     departureTime,
 	}
 
 	getAvailableFlightRouteResponse, err := h.flightService.GetAvailableFlightRoute(getAvailableFlightRouteRequest)
@@ -143,6 +174,8 @@ func (h *BookFlightCommand) Execute() (err error) {
 		getAvailableFlightRoutesByCityRequest := flight_model.GetAvailableFlightRoutesByCityRequest{
 			DepartureCityID: departureCityObj[0].ID,
 			CurrentDay:      currentDay,
+			DepartureDay:    departureDay,
+			DepartureTime:   departureTime,
 		}
 		availableFlightRoutesByCity, errGetAvailableFlightRoutesByCity := h.flightService.GetAvailableFlightRoutesByCity(getAvailableFlightRoutesByCityRequest)
 		if errGetAvailableFlightRoutesByCity != nil {
@@ -150,10 +183,20 @@ func (h *BookFlightCommand) Execute() (err error) {
 			return err
 		}
 		for _, flightRoute := range availableFlightRoutesByCity.GetAvailableFlightRouteResponses {
+			var departureTimeTransit = departureTime
+			var departureDayTransit = departureDay
+			if flightRoute.FlightRoute.DepartureTime == utils.MORNING {
+				departureTimeTransit = utils.EVENING
+			} else {
+				departureTimeTransit = utils.MORNING
+				departureDayTransit += 1
+			}
 			req := flight_model.GetAvailableFlightRouteRequest{
 				DepartureCityID:   flightRoute.FlightRoute.DestinationCityID,
 				DestinationCityID: destinationCityObj[0].ID,
-				CurrentDay:        flightRoute.FlightRoute.ScheduledDay - 1,
+				CurrentDay:        flightRoute.FlightRoute.DepartureDay - 1,
+				DepartureDay:      departureDayTransit,
+				DepartureTime:     departureTimeTransit,
 			}
 			resp, err := h.flightService.GetAvailableFlightRoute(req)
 			if err != nil {
@@ -173,23 +216,29 @@ func (h *BookFlightCommand) Execute() (err error) {
 				transitRoutes[0].FlightRoute.DepartureCity.Name,
 				transitRoutes[0].FlightRoute.DestinationCity.Name,
 				transitRoutes[1].FlightRoute.DestinationCity.Name,
-				transitRoutes[0].FlightRoute.ScheduledDay)
+				transitRoutes[0].FlightRoute.DepartureDay)
 			for _, transiteRoute := range transitRoutes {
 				fmt.Printf(utils.AvailableSeatsMessage,
 					transiteRoute.AvailableSeats,
 					transiteRoute.FlightRoute.DepartureCity.Name,
-					transiteRoute.FlightRoute.DestinationCity.Name)
+					transiteRoute.FlightRoute.DestinationCity.Name,
+					transiteRoute.FlightRoute.DepartureDay,
+					transiteRoute.FlightRoute.DepartureTime,
+					transiteRoute.FlightRoute.Aircraft.Name)
 			}
 		}
 	} else {
 		fmt.Printf(utils.DirectFlightFoundMessage,
 			getAvailableFlightRouteResponse.FlightRoute.DepartureCity.Name,
 			getAvailableFlightRouteResponse.FlightRoute.DestinationCity.Name,
-			getAvailableFlightRouteResponse.FlightRoute.ScheduledDay)
+			getAvailableFlightRouteResponse.FlightRoute.DepartureDay)
 		fmt.Printf(utils.AvailableSeatsMessage,
 			getAvailableFlightRouteResponse.AvailableSeats,
 			getAvailableFlightRouteResponse.FlightRoute.DepartureCity.Name,
-			getAvailableFlightRouteResponse.FlightRoute.DestinationCity.Name)
+			getAvailableFlightRouteResponse.FlightRoute.DestinationCity.Name,
+			getAvailableFlightRouteResponse.FlightRoute.DepartureDay,
+			getAvailableFlightRouteResponse.FlightRoute.DepartureTime,
+			getAvailableFlightRouteResponse.FlightRoute.Aircraft.Name)
 		bookedRoutes = append(bookedRoutes, getAvailableFlightRouteResponse.FlightRoute)
 	}
 
@@ -232,7 +281,11 @@ func (h *BookFlightCommand) Execute() (err error) {
 				fmt.Printf(utils.BookingDetailMessage,
 					flightRouteSeat.SeatNumber,
 					flightRoute.DepartureCity.Name,
-					flightRoute.DestinationCity.Name)
+					flightRoute.DestinationCity.Name,
+					flightRoute.DepartureDay,
+					flightRoute.DepartureTime,
+					flightRoute.Aircraft.Name,
+				)
 			}
 		}
 	}

@@ -1,8 +1,6 @@
 package booking_service
 
 import (
-	"fmt"
-
 	booking_model "github.com/charles-arnesus/coding-battle-go/models/booking"
 	flight_model "github.com/charles-arnesus/coding-battle-go/models/flight"
 	"github.com/charles-arnesus/coding-battle-go/utils"
@@ -68,7 +66,6 @@ func (r *bookingService) SaveBooking(in booking_model.SaveBookingRequest) (out b
 		}
 		err = r.flightRepository.InsertFlightRouteSeat(flightRouteSeatRequest)
 		if err != nil {
-			fmt.Println("disini? 3")
 			return
 		}
 
