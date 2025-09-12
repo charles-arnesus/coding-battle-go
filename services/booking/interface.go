@@ -7,4 +7,5 @@ type BookingService interface {
 	GetBookingSystem() (booking_model.BookingSystem, error)
 	GetBookingDetails(userID uint, currentDay int) (booking_model.GetBookingDetailsResponse, error)
 	SaveBooking(in booking_model.SaveBookingRequest) (out booking_model.SaveBookingResponse, err error)
+	CancelBooking(bookingIDStr string, userID uint) error
 }

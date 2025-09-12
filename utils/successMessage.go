@@ -11,3 +11,4 @@ const TransitFlightFoundMessage = "Found transit flight: %s -> %s -> %s (Day %d)
 const AvailableSeatsMessage = "%d seat(s) available on %s -> %s (Day %d %s) %s\n"
 const BookingSuccessMessage = "Booking Confirmed! Booking ID: %d\n"
 const BookingDetailMessage = "Seat #%d on %s -> %s Day %d %s with %s aircraft\n"
+const BookingCancellationSuccessMessage = "Booking ID: %s cancelled. All seats have been released and are now available"

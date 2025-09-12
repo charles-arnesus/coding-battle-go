@@ -97,19 +97,25 @@ func (h *CancelFlightCommand) Execute() (err error) {
 
 	fmt.Print("Select booking to cancel (Enter ID): ")
 	reader := bufio.NewReaderSize(os.Stdin, 1)
-	input, err := reader.ReadString('\n')
+	bookingIDStr, err := reader.ReadString('\n')
 	if err != nil {
 		fmt.Println(utils.ErrInputInvalid)
 		return
 	}
 
-	if !utils.ContainsString(bookingIDs, strings.TrimSpace(input)) {
+	bookingIDStr = strings.TrimSpace(bookingIDStr)
+
+	if !utils.ContainsString(bookingIDs, strings.TrimSpace(bookingIDStr)) {
 		fmt.Println(utils.ErrInputInvalid)
 		return
 	}
 
-	// TODO
-	//err := h.bookingService.CancelBooking(input)
+	err = h.bookingService.CancelBooking(bookingIDStr, loggedUser.ID)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf(utils.BookingCancellationSuccessMessage, bookingIDStr)
 
 	return
 }

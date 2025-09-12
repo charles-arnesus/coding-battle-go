@@ -92,7 +92,6 @@ func Start() {
 			// masuk ke command login kirim parameter
 			err = authenticationService.LoginUser(loginDto)
 			if err != nil {
-				fmt.Println(err.Error())
 				if strings.Contains(err.Error(), utils.RecordNotFoundMessage) {
 					fmt.Println("username not found, creating new user...")
 

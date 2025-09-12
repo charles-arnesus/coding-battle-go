@@ -18,6 +18,8 @@ type FlightRepository interface {
 	FindFlightRoutesByCities(departureCityID, destinationCityID uint, departureDay int, departureTime string) (flightRoute []flight_model.FlightRoute, err error)
 	FindFlightRouteSeats(flightRouteID uint) (flightRouteSeats []flight_model.FlightRouteSeat, err error)
 	FindFlightRouteSeatsUserID(userID uint) (flightRouteSeats []flight_model.FlightRouteSeat, err error)
+	FindFlightRouteSeatsUserIDFlightRouteID(userID uint, flightRouteID uint) (flightRouteSeats []flight_model.FlightRouteSeat, err error)
 	FindTakenFlightRouteSeats(flightRouteID uint) (takenSeats []int, err error)
 	InsertFlightRouteSeat(in flight_model.FlightRouteSeat) error
+	DeleteFlightRouteSeats(flightRouteSeatIDs []uint) error
 }
