@@ -5,14 +5,13 @@ services:
     image: postgres:15
     container_name: coding_battle_go_postgres
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydb
+      POSTGRES_USER: codingbattlego
+      POSTGRES_PASSWORD: codingbattlego123
+      POSTGRES_DB: codingbattlego
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./db_init:/docker-entrypoint-initdb.d
 
   coding-battle-go-app:
     build: .
@@ -21,7 +20,7 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: "postgres://myuser:mypassword@postgres:5432/mydb?sslmode=disable"
+      DATABASE_URL: "postgres://codingbattlego:codingbattlego123@postgres:5432/codingbattlego?sslmode=disable"
     entrypoint: ["./wait-and-run.sh"]
 
 volumes:
