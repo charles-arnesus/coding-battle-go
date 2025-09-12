@@ -34,10 +34,27 @@ const ExitLabel = "Exit"
 const BookAFlightLabel = "Book a Flight"
 const CancelABookingLabel = "Cancel a Booking"
 
+// status
+const SCHEDULED = "SCHEDULED"
+const DEPARTED = "DEPARTED"
+const ARRIVED = "ARRIVED"
+
+// yes no
+const Yes = "y"
+const No = "n"
+
 var MenuAdmin = []string{
 	RegisterAircraftLabel, AddDestinationLabel, CreateFlightRouteLabel, RunBookingServiceLabel, GoToNextDayLabel, RunFlightLabel,
 }
 
 var MenuPassenger = []string{
 	BookAFlightLabel, CancelABookingLabel,
+}
+
+var FlightStatus = []string{
+	SCHEDULED, DEPARTED, ARRIVED,
+}
+
+var UnavailableFlightStatus = []string{
+	DEPARTED, ARRIVED,
 }

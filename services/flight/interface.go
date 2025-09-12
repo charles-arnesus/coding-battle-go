@@ -10,4 +10,6 @@ type FlightService interface {
 	GetAircrafts(name string) (aircrafts []flight_model.Aircraft, err error)
 	GetDestinations(name string) (destinations []flight_model.Destination, err error)
 	GetFlightRoutes(minDay, maxDay int) (flightRoutes []flight_model.FlightRoute, err error)
+	GetAvailableFlightRoutesByCity(in flight_model.GetAvailableFlightRoutesByCityRequest) (out flight_model.GetAvailableFlightRoutesByCityResponse, err error)
+	GetAvailableFlightRoute(in flight_model.GetAvailableFlightRouteRequest) (out flight_model.GetAvailableFlightRouteResponse, err error)
 }

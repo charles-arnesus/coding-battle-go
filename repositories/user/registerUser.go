@@ -7,12 +7,13 @@ import (
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
 
-func (r *userRepository) RegisterUser(user user_model.User) (err error) {
-	err = r.db.Create(&user).Error
-
-	if err != nil && strings.Contains(err.Error(), utils.UniqueViolationCodePostgres) {
+func (r *userRepository) RegisterUser(user user_model.User) (userID uint, err error) {
+	result := r.db.Create(&user)
+	if result.Error != nil && strings.Contains(result.Error.Error(), utils.UniqueViolationCodePostgres) {
 		err = utils.ErrUsernameAlreadyExistMsg
 	}
+
+	userID = user.ID
 
 	return
 }
