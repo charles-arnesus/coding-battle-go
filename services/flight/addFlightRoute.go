@@ -8,7 +8,7 @@ import (
 	"github.com/charles-arnesus/coding-battle-go/utils"
 )
 
-func (s *flightService) AddFlightRoute(in flight_model.AddFlightRouteDTO) (err error) {
+func (s *flightService) AddFlightRoute(in flight_model.AddFlightRouteRequest) (err error) {
 
 	// should between current day - max in year
 	isPreviousDay := in.FlightRoute.DepartureDay < in.CurrentDay

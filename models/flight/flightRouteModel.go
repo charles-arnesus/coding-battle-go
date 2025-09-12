@@ -29,7 +29,7 @@ type FlightRouteSeat struct {
 	User          user_model.User `gorm:"foreignKey:UserID;"`
 }
 
-type AddFlightRouteDTO struct {
+type AddFlightRouteRequest struct {
 	FlightRoute FlightRoute
 	CurrentDay  int
 }
@@ -56,4 +56,12 @@ type GetAvailableFlightRoutesByCityRequest struct {
 
 type GetAvailableFlightRoutesByCityResponse struct {
 	GetAvailableFlightRouteResponses []GetAvailableFlightRouteResponse
+}
+
+type GetFlightRouteByRequest struct {
+	AircraftID      uint
+	DepartureDay    int
+	DepartureCity   uint
+	DestinationCity uint
+	FlightTime      string
 }
