@@ -76,7 +76,7 @@ func (h *CreateFlightRouteCommand) Execute() (err error) {
 		Status:          utils.SCHEDULED,
 	}
 
-	err = h.flightService.AddFlightRoute(flight_model.AddFlightRouteRequest{
+	err = h.flightService.AddFlightRoute(flight_model.UpsertFlightRouteRequest{
 		FlightRoute: flightRoute,
 		CurrentDay:  currentDay,
 	})

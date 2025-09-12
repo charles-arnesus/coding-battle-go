@@ -7,6 +7,7 @@ type FlightRepository interface {
 	InsertDestination(destination flight_model.Destination) error
 	InsertFlightRoute(flightRoute flight_model.FlightRoute) (err error)
 	InsertFlightRouteSeat(in flight_model.FlightRouteSeat) error
+	UpdateFlightRouteStatus(flightRoute flight_model.FlightRoute) (err error)
 
 	flightRepositoryRead
 }
