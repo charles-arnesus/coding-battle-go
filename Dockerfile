@@ -19,7 +19,6 @@ FROM debian:bookworm-slim
 
 WORKDIR /app
 COPY --from=builder /app/main .
-COPY .env .
 
 # Install postgres client for pg_isready
 RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
