@@ -44,7 +44,7 @@ Admin will have to choose:
 - Departure city
 - Destination city
 - Aircraft
-- Departure day (2-365)
+- Departure day ( (current day + 1) - 365)
 - Departure time (Morning / Evening)
 
 ### Enable/Disable Booking Service
